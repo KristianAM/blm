@@ -21,29 +21,44 @@ construct_responseless_model_matrix <- function(formula, df){
   return(model.matrix(responseless, model.frame(responseless, data = df)))
 }
 
+#' get posterior of blm object
+#'
+#' This function fetches the mean(s) and covariance matrix posterior distribution
+#'
+#' @param blm an object of class blm
+#' @return a list of mean(s) and covariance matrix
+posterior <-function(blm){
+  post <- list()
+  post$mean <- blm$mean
+  post$variance <- blm$variance
+  post
+}
+
 #'bayesian linear regression function
 #'
 #'main constructor function for creating an object of class blm
 #'
 #'@param formula an object of type formula
 #'@param df an object of type dataframe
-#'@param alpha a number
-#'@param beta a number
+#'@param prior an object of type blm
+#'@param beta the precision
 #'@return an object of class blm
 #'
 #'@export
-blm <- function(formula, df, alpha = 0.5, beta = 1.3){
-  call <- as.list(sys.call())
+blm <- function(formula, df, beta = 1.3, prior = NULL){
+  call <- match.call()
+  if(is.null(prior)) {alpha = 0.5}
+  else {alpha <- posterior(prior)$var}
   model_matrix <- construct_model_matrix(formula, df = df)
-  Sxyneg <- diag(alpha, nrow = ncol(model_matrix)) + beta * t(model_matrix) %*% model_matrix
-  Sxy <- Sxyneg * Sxyneg^2
+  Sxy <- diag(alpha, nrow = ncol(model_matrix)) + beta * t(model_matrix) %*% model_matrix
+  Sxy <- solve(Sxy)
   Mxy <- beta * Sxy %*% t(model_matrix) %*% model.response(model.frame(formula, df))
-  posterior <- list()
-  posterior$call <- call[[2]]
-  posterior$Sxy <- Sxy
-  posterior$Mxy <- Mxy
-  class(posterior) <- 'blm'
-  posterior
+  object <- list()
+  object$call <- call
+  object$variance <- Sxy
+  object$mean <- Mxy
+  class(object) <- 'blm'
+  object
 }
 
 #' predict new values from blm
@@ -56,7 +71,7 @@ blm <- function(formula, df, alpha = 0.5, beta = 1.3){
 #'
 #'@export
 predict.blm <- function(blm, x){
-  model_matrix <- construct_responseless_model_matrix(formula(blm$call), df = x)
-  y <- t(blm$Mxy) %*% t(model_matrix)
+  model_matrix <- construct_responseless_model_matrix(formula(formula(blm$call)), df = x)
+  y <- t(blm$mean) %*% t(model_matrix)
   y
 }

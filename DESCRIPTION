@@ -7,6 +7,7 @@ Authors@R: person("Kristian", "Andersen-Moller",
                   role = c("aut", "cre"))
 Description: This package contain functions for fitting a bayesian linear model and accessing different elements of the fitted model
 License: GPL-2
-Depends:
+Depends: 
     R (>= 2.10)
 RoxygenNote: 5.0.1
+Suggests: testthat
