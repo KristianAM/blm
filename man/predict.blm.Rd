@@ -4,15 +4,15 @@
 \alias{predict.blm}
 \title{predict new values from blm}
 \usage{
-\method{predict}{blm}(blm, x)
+\method{predict}{blm}(object, newdata = NULL)
 }
 \arguments{
-\item{blm}{an object of class blm}
+\item{object}{an object of class blm}
 
-\item{x}{an object of type dataframe}
+\item{newdata}{an object of type dataframe}
 }
 \value{
-predicted y values from x
+predicted y values from newdata
 }
 \description{
 A function for predicting values of y from new data

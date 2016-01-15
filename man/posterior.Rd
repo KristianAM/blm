@@ -13,6 +13,6 @@ posterior(blm)
 a list of mean(s) and covariance matrix
 }
 \description{
-This function fetches the mean(s) and covariance matrix posterior distribution
+This function fetches the mean(s) and covariance matrix of the posterior distribution
 }
 

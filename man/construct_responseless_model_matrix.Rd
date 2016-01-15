@@ -4,15 +4,15 @@
 \alias{construct_responseless_model_matrix}
 \title{Construct responseless model matrix}
 \usage{
-construct_responseless_model_matrix(formula, df)
+construct_responseless_model_matrix(formula, Data)
 }
 \arguments{
 \item{formula}{an object of type formula}
 
-\item{df}{an object of type dataframe}
+\item{Data}{an object of type dataframe}
 }
 \value{
-a model matrix with data from df
+a responseless model matrix
 }
 \description{
 This function constructs a model matrix for data with no response

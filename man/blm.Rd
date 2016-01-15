@@ -4,16 +4,16 @@
 \alias{blm}
 \title{bayesian linear regression function}
 \usage{
-blm(formula, df, beta = 1.3, prior = NULL)
+blm(formula, beta = 1.3, prior = NULL, Data = NULL)
 }
 \arguments{
 \item{formula}{an object of type formula}
 
-\item{df}{an object of type dataframe}
-
 \item{beta}{the precision}
 
 \item{prior}{an object of type blm}
+
+\item{Data}{an object of type dataframe}
 }
 \value{
 an object of class blm

@@ -4,12 +4,12 @@
 \alias{construct_model_matrix}
 \title{Construct model matrix}
 \usage{
-construct_model_matrix(formula, ...)
+construct_model_matrix(formula, Data = NULL)
 }
 \arguments{
 \item{formula}{an object of type formula}
 
-\item{...}{can be an object of type dataframe}
+\item{Data}{an object of type dataframe}
 }
 \value{
 a model matrix with data either from df or from the global environment
