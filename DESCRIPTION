@@ -1,6 +1,6 @@
 Package: blm
 Title: A Package For Implementing Bayesian Linear Regression
-Version: 0.0.0.9000
+Version: 0.0.0.9002
 Date: 2015-12-18
 Authors@R: person("Kristian", "Andersen-Moller",
                   email = "kristian.amoller@gmail.com",

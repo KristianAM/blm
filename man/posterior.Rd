@@ -4,10 +4,10 @@
 \alias{posterior}
 \title{get posterior of blm object}
 \usage{
-posterior(blm)
+posterior(object)
 }
 \arguments{
-\item{blm}{an object of class blm}
+\item{object}{an object of class blm}
 }
 \value{
 a list of mean(s) and covariance matrix

@@ -1,0 +1,15 @@
+context('testing update function')
+
+test_that('update alters coefficients', {
+  x <- runif(500000)
+  w1 <- runif(1)
+  w0 <- runif(1)
+  y <- rnorm(500000, mean = x * w1 + w0)
+  df <- data.frame(x,y)
+  blmodel <- blm(y ~ x, Data = df, beta = 1, prior = NULL)
+  x <- runif(50000)
+  y <- rnorm(50000, mean = x * 2* w1 + 2 * w0)
+  newdf <- data.frame(x,y)
+  newmodel <- update(blmodel, Data = newdf)
+  expect_error(expect_equal(blmodel$Posterior$mean, newmodel$Posterior$mean))
+})

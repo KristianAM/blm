@@ -10,5 +10,5 @@ test_that( 'blm correctly predicts y values', {
   colnames(newx) <- 'x'
   predictedy <- predict(object = model, newdata = newx)
   expectedy <- c(newx * w1 + w0)[[1]]
-  expect_equal(c(predictedy), expectedy, tolerance = 1e-3)
+  expect_equal(c(predictedy), expectedy, tolerance = 1e-1)
 })
