@@ -27,7 +27,7 @@ construct_responseless_model_matrix <- function(formula, Data){
 #'
 #' @param object an object of class blm
 #' @return a list of mean(s) and covariance matrix
-  posterior <-function(object) object$posterior
+  posterior <- function(object) object$posterior
 
 #'bayesian linear regression function
 #'
@@ -42,16 +42,18 @@ construct_responseless_model_matrix <- function(formula, Data){
 #'@export
 blm <- function(formula, prior = NULL, beta = 1.3, Data = NULL){
   call <- match.call()
-  if(is.null(prior)) {alpha = 0.5}
-  else {alpha <- prior$variance}
   if(is.null(Data)){ model_matrix <-construct_model_matrix(formula)
-                     response <- model.response(model.frame(formula))
-                     model <- model.frame(formula)}
+  response <- model.response(model.frame(formula))
+  model <- model.frame(formula)}
   else{
-                     model_matrix <- construct_model_matrix(formula, Data = Data)
-                     response <- model.response(model.frame(formula, Data))
-                     model <- model.frame(formula, data = Data)}
-  Sxy <- diag(alpha, nrow = ncol(model_matrix)) + beta * t(model_matrix) %*% model_matrix
+    model_matrix <- construct_model_matrix(formula, Data = Data)
+    response <- model.response(model.frame(formula, Data))
+    model <- model.frame(formula, data = Data)}
+  if(is.null(prior)) {alpha <- 0.5
+                      S <- diag(alpha, nrow = ncol(model_matrix))}
+  else {S <- prior$variance}
+
+  Sxy <-  S + beta * t(model_matrix) %*% model_matrix
   Sxy <- solve(Sxy)
   Mxy <- beta * Sxy %*% t(model_matrix) %*% response
   posterior <- list()
@@ -63,6 +65,7 @@ blm <- function(formula, prior = NULL, beta = 1.3, Data = NULL){
 
   object <- list()
   object$call <- call
+  object$formula <- formula
   object$coefficients <- coef
   object$model <- model
   object$posterior <- posterior
@@ -85,7 +88,7 @@ predict.blm <- function(object, newdata = NULL){
   if (!inherits(object, "blm")) {warning("calling predict.blm(<fake-blm-object>) ...")}
   if (is.null(newdata)){ Data <- object$model}
   else{ Data <- newdata}
-  model_matrix <- construct_responseless_model_matrix(formula(formula(object$call)), Data = Data)
+  model_matrix <- construct_responseless_model_matrix(formula(object$formula), Data = Data)
   posterior <- posterior(object)
   y <- t(posterior$mean) %*% t(model_matrix)
   y
@@ -102,7 +105,7 @@ predict.blm <- function(object, newdata = NULL){
 #' @export
 update.blm <- function(object, Data = NULL){
   if (!inherits(object, "blm")) {warning("calling predict.blm(<fake-blm-object>) ...")}
-  model <- blm(formula, prior = posterior(blm), beta = 1.3, Data = Data)
+  model <- blm(object$formula, prior = posterior(object), beta = 1.3, Data = Data)
   model
 }
 
@@ -190,7 +193,7 @@ confint.blm <- function(object, parm, level = 0.95, ...){
 #'
 #' @export
 plot.blm <- function(x, ...){
-  if (!inherits(object, "blm")) {warning("calling plot.blm(<fake-blm-object>) ...")}
+  if (!inherits(x, "blm")) {warning("calling plot.blm(<fake-blm-object>) ...")}
   plot(x = x$fitted.values, y = x$residuals,
        ylim = c(min(x$residuals), max(x$residuals)), xlim = c(min(x$fitted.values), max(x$fitted.values)),
        main = "Residuals vs Fitted", xlab = "Fitted values", ylab = "Residuals")
@@ -206,11 +209,11 @@ plot.blm <- function(x, ...){
 #'
 #' @export
 print.blm <- function(x, ...){
-  cat("\nCall:\n", paste(deparse(object$call), sep = "\n", collapse = "\n"),
+  cat("\nCall:\n", paste(deparse(x$call), sep = "\n", collapse = "\n"),
       "\n\n", sep = "")
-  if (length(coefficients(object))) {
+  if (length(coefficients(x))) {
     cat("Coefficients:\n")
-    print.default(format(coefficients(object),digits = max(3L, getOption("digits") - 3L)), print.gap = 2L,
+    print.default(format(coefficients(x),digits = max(3L, getOption("digits") - 3L)), print.gap = 2L,
                   quote = FALSE)
   }
   else cat("No coefficients\n")

@@ -11,5 +11,5 @@ test_that('update alters coefficients', {
   y <- rnorm(50000, mean = x * 2* w1 + 2 * w0)
   newdf <- data.frame(x,y)
   newmodel <- update(blmodel, Data = newdf)
-  expect_error(expect_equal(blmodel$Posterior$mean, newmodel$Posterior$mean))
+  expect_error(expect_equal(blmodel$posterior$mean, newmodel$posterior$mean, tolerance = 1e-1))
 })

@@ -6,7 +6,7 @@ test_that('blm correctly estimates weights', {
   w0 <- runif(1)
   y <- rnorm(500000, mean = x * w1 + w0)
   df <- data.frame(x,y)
-  blmodel <- blm(y ~ x, Data = df, beta = 1, prior = NULL)
+  blmodel <- blm(y ~ x, Data = df, beta = 1)
   post <- blmodel$posterior$mean
-  expect_equal(c(post), c(w0,w1), tolerance = 1e-2)
+  expect_equal(c(post), c(w0,w1), tolerance = 1e-1)
 })
