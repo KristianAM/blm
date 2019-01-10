@@ -2,8 +2,8 @@ Package: blm
 Title: A Package For Implementing Bayesian Linear Regression
 Version: 0.0.0.9002
 Date: 2015-12-18
-Authors@R: person("Kristian", "Andersen-Moller",
-                  email = "kristian.amoller@gmail.com",
+Authors@R: person("KristianAM",
+                  email = "",
                   role = c("aut", "cre"))
 Description: This package contain functions for fitting a bayesian linear model and accessing different elements of the fitted model.
 License: GPL-2
